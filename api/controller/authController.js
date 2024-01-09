@@ -7,11 +7,11 @@ export const signup = catchAsync(async (req, res, next) => {
   const hashpassword = bcryptjs.hashSync(req.body.password, 12);
 
   const newUser = new User({
-    userName: req.body.userName,
+    username: req.body.username,
     email: req.body.email,
     password: hashpassword,
   });
-  await newUser.save({ validateBeforeSave: false });
+  await newUser.save();
 
   res.status(201).json({
     status: "successful",

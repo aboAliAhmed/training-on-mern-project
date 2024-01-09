@@ -6,13 +6,14 @@ const handleCastErrorDB = (err) => {
 };
 
 const handleDuplicateFieldsDB = (err) => {
-  const message = `Duplicate field value: ${err.keyValue.email}. Please use another value`;
+  const message = `Duplicate field value: ${Object.keys(
+    err.keyValue
+  )}. Please use another value`;
   return new AppError(message, 400);
 };
 
 const handleValidationErrorDB = (err) => {
   const errors = Object.values(err.errors).map((el) => el.message);
-
   const message = `invalid input data. ${errors.join(". ")}`;
   return new AppError(message, 400);
 };
@@ -51,7 +52,7 @@ const sendErrorProd = (err, res) => {
 };
 
 const globalErrorHandler = (err, req, res, next) => {
-  console.log("lol");
+  console.log("###", err);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
@@ -65,6 +66,7 @@ const globalErrorHandler = (err, req, res, next) => {
       error = handleCastErrorDB(error);
       sendErrorProd(error, res);
     } else if (err.code === 11000) {
+      console.log("...", err);
       error = handleDuplicateFieldsDB(error);
       sendErrorProd(error, res);
     } else if (errName === "ValidationError") {
