@@ -52,7 +52,6 @@ const sendErrorProd = (err, res) => {
 };
 
 const globalErrorHandler = (err, req, res, next) => {
-  console.log("###", err);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
@@ -66,7 +65,6 @@ const globalErrorHandler = (err, req, res, next) => {
       error = handleCastErrorDB(error);
       sendErrorProd(error, res);
     } else if (err.code === 11000) {
-      console.log("...", err);
       error = handleDuplicateFieldsDB(error);
       sendErrorProd(error, res);
     } else if (errName === "ValidationError") {
