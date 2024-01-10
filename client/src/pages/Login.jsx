@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
-export default function SignUp() {
+export default function Login() {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); // to disable submit button when submitting
@@ -17,7 +17,7 @@ export default function SignUp() {
     e.preventDefault();
     try{
       setLoading(true);
-      const res = await fetch('/api/v1/auth/signup', {
+      const res = await fetch('/api/v1/auth/login', {
         method: 'POST',
         headers : {
           'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ export default function SignUp() {
       }
       setLoading(false);
       setError(null);
-      navigate('/sign-in')
+      navigate('/')
     } catch (err) {
       setLoading(false);
       setError(err.message);   
@@ -45,18 +45,11 @@ export default function SignUp() {
     <div
       className='p-3 max-w-lg mx-auto w-fit'
     >
-      <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
+      <h1 className='text-3xl text-center font-semibold my-7'>Log In</h1>
       <form 
         className='flex flex-col gap-4 w-80 m-auto'
         onSubmit={handleSubmit}
       >
-        <input
-          type='text' 
-          placeholder='username'
-          className='border p-3 rounded-lg' 
-          id='username' 
-          onChange={handleChange} 
-        />
         <input 
           type='email' 
           placeholder='email'
@@ -74,16 +67,16 @@ export default function SignUp() {
           disabled={loading}
           className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
         >
-          {loading ? 'Loading...' : 'Sign Up'}
+          {loading ? 'Loading...' : 'Log In'}
         </button>
       </form> 
-      <div className='flex gap-2 mt-5 ml-2'>
-        <p>Have an account?</p>
-        <Link to={'/login'}>
-          <span className='text-blue-700'>Sign In</span>
+      <div className='flex gap-2 w-fit mt-5 mx-auto'>
+        <p>{`Don't have an account?`}</p>
+        <Link to={'/sign-up'}>
+          <span className='text-blue-700'>Sign Up</span>
         </Link>
       </div>
-      {error && <p className='text-red-500 mt-5'>{error}</p>}
+      {error && <p className='text-red-500 w-fit mt-5 m-auto'>{error}</p>}
     </div>
   )
 }
