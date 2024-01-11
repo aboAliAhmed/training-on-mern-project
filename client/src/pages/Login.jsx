@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import {Link, useNavigate} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice';
 
 export default function Login() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false); // to disable submit button when submitting
+  const { loading, error } = useSelector((state)=>state.user)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setFormData({
       ...formData, 
@@ -16,7 +19,7 @@ export default function Login() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-      setLoading(true);
+      dispatch(loginStart);
       const res = await fetch('/api/v1/auth/login', {
         method: 'POST',
         headers : {
@@ -25,19 +28,15 @@ export default function Login() {
         body: JSON.stringify(formData)
       });
       const data = await res.json();
-      setLoading(false)
-
+      console.log(data)
       if (data.status === 'fail') {
-        setLoading(false);
-        setError(data.message);
+        dispatch(loginFailure(data.message))
         return;
       }
-      setLoading(false);
-      setError(null);
+      dispatch(loginSuccess(data));
       navigate('/')
     } catch (err) {
-      setLoading(false);
-      setError(err.message);   
+      dispatch(loginFailure(err.message))
     }
   }; 
 
