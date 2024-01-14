@@ -64,6 +64,7 @@ export const google = catchAsync(async (req, res, next) => {
     if (user) {
       createSendToken(user, 200, res);
     } else {
+      console.log(req.body);
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8); // It results the last 8 digits of a number like (0.5sfs6asds7r) so we got a 16 digits

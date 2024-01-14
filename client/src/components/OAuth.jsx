@@ -22,13 +22,12 @@ export default function OAuth() {
         body: JSON.stringify({ 
           name: result.user.displayName, 
           email: result.user.email,
-          photo: result.user.photoURL,
+          imageUrl: result.user.photoURL,
         })
       })
       const data = await res.json();
       dispatch(loginSuccess(data));
-      console.log(result);
-      navigate('/');
+      navigate('/'); 
     } catch (err) { 
         console.log('could not sign in with this account', err)
       }
