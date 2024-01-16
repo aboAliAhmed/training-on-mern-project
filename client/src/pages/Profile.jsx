@@ -9,33 +9,31 @@ import {
 import { app } from "../firebase";
 
 export default function Profile () {
-  const fileRef = useRef(null);
+  const fileRef = useRef(null); // To reference the file input element.
   const {currentUser} = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  console.log('formData', formData);
 
   useEffect(()=> {
-    if(file) {
+    if(file) { // useEffect is triggered whenever the file state changes.
       handleFileUpload(file);
     }
   }, [file]);
 
   const handleFileUpload = () => {
-    const storage = getStorage(app);
+    const storage = getStorage(app); // Getting a reference to Firebase Storage
     const fileName = new Date().getTime() + file.name; // to make file name unique
     const storageRef = ref(storage, fileName); // Showing which place to save storage
-    const uploadTask = uploadBytesResumable(storageRef, file); // show the persentage of upload
+    const uploadTask = uploadBytesResumable(storageRef, file); // uploadBytesResumable allows tracking the upload progress
 
-    uploadTask.on('state_chaged', 
+    uploadTask.on('state_changed', 
     (snapshot) => {
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log(`Upload is ${progress}% done`);
       setFilePerc(Math.round(progress));
     },
-    (err) => {
+    (error) => {
       setFileUploadError(true);
     },
     () => {

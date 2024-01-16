@@ -1,13 +1,17 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 import authRouter from "./routes/authRoute.js";
 import userRouter from "./routes/userRoutes.js";
 import globalErrorHandler from "./controller/errorController.js";
 
 const app = express();
+
 app.use(express.json());
+
+app.use(cookieParser());
 
 dotenv.config({ path: "./config.env" });
 const DB = process.env.DATABASE.replace(

@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema(
       default:
         "https://imgs.search.brave.com/Evls_n45SXJWvHRGRQWHlz6EUt0iGjxIvPflf-mgeSQ/rs:fit:500:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAzLzQwLzEyLzQ5/LzM2MF9GXzM0MDEy/NDkzNF9iejNwUVRM/cmRGcEg5MmVra251/YVRIeThKdVhnRzdm/aS5qcGc",
     },
+    passwordChangedAt: Date,
   },
   { timestamps: true }
 );
@@ -45,6 +46,20 @@ userSchema.methods.correctPassword = async function (
 ) {
   console.log(candidatePassword, userPassword);
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // False means NOT changed
+  return false;
 };
 
 const User = mongoose.model("User", userSchema);
