@@ -29,8 +29,9 @@ export default function OAuth() {
       dispatch(loginSuccess(data));
       navigate('/'); 
     } catch (err) { 
-        console.log('could not sign in with this account', err)
-      }
+      console.error('Error during sign-in:', err);
+      console.log('could not sign in with this account', err)
+    }
   }
   return (
     <button

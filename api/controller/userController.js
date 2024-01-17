@@ -26,7 +26,7 @@ export const protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-
+  console.log(token);
   if (!token) {
     return next(
       new AppError("You are not logged in! Please log in to get access.", 401)
@@ -71,8 +71,12 @@ export const updateUser = catchAsync(async (req, res, next) => {
     );
   }
 
+  if (req.user.id !== req.params.id) {
+    return next(new AppError("you can only update your account", 400));
+  }
+
   // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, "username", "email", "photo");
+  const filteredBody = filterObj(req.body, "username", "email", "avatar");
 
   // 3) Update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
