@@ -47,24 +47,26 @@ export const signup = catchAsync(async (req, res, next) => {
 
 export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
+
   if (!email || !password)
     return next(new AppError("Provide your email and password", 401));
   const user = await User.findOne({ email });
-  console.log(user);
+
   if (!user) return next(new AppError("There is no user for this email", 401));
+
   if (!(await user.correctPassword(password, user.password)))
     return next(new AppError("wrong password", 401));
+
   createSendToken(user, 200, res);
 });
 
 export const google = catchAsync(async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    console.log(req.body);
+
     if (user) {
       createSendToken(user, 200, res);
     } else {
-      console.log(req.body);
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8); // It results the last 8 digits of a number like (0.5sfs6asds7r) so we got a 16 digits
@@ -82,4 +84,8 @@ export const google = catchAsync(async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+export const logout = catchAsync(async (req, res, next) => {
+  res.clearCookie("jwt");
+  res.status(200).json("User has been logged out!");
 });

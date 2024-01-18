@@ -40,7 +40,7 @@ export default function Header() {
                 />
               ) : (
               <li className='hidden sm:inline text-slate-700 hover:underline' >
-                Sign in
+                Log In
               </li>
               )
               }
