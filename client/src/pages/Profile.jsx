@@ -10,7 +10,10 @@ import { app } from "../firebase";
 import { 
   updateUserStart, 
   updateUserSuccess, 
-  updateUserFailure 
+  updateUserFailure, 
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -46,7 +49,6 @@ export default function Profile() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log(downloadURL)
           setFormData({ ...formData, avatar: downloadURL });
         })
       }
@@ -61,24 +63,39 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`/api/v1/user/updateMe/${currentUser.data.user._id}`,{
-        method: 'POST',
+      const res = await fetch(`/api/v1/user/${currentUser.data.user._id}`,{
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if(data.status === 'fail') {
         dispatch(updateUserFailure(data.message));
       }
 
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
-      console.log(currentUser.data?.user)
     } catch (err) {
       dispatch(updateUserFailure(err.message));
+    }
+  }
+
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/v1/user/${currentUser.data.user._id}`, {
+        method: 'DELETE',
+      })
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (err) {
+      dispatch(deleteUserFailure(err.message));
     }
   }
 
@@ -142,7 +159,10 @@ export default function Profile() {
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">
+        <span 
+          onClick={handleDeleteUser} 
+          className="text-red-700 cursor-pointer"
+        >
           Delete account
         </span>
         <span className="text-red-700 cursor-pointer">

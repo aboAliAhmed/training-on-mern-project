@@ -26,7 +26,6 @@ export const protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  console.log(token);
   if (!token) {
     return next(
       new AppError("You are not logged in! Please log in to get access.", 401)
@@ -71,9 +70,8 @@ export const updateUser = catchAsync(async (req, res, next) => {
     );
   }
 
-  if (req.user.id !== req.params.id) {
+  if (req.user.id !== req.params.id)
     return next(new AppError("you can only update your account", 400));
-  }
 
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(req.body, "username", "email", "avatar");
@@ -93,4 +91,13 @@ export const updateUser = catchAsync(async (req, res, next) => {
       user: updatedUser,
     },
   });
+});
+
+export const deleteUser = catchAsync(async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return next(new AppError("you can only delete your account!", 401));
+
+  await User.findByIdAndDelete(req.params.id);
+  res.clearCookie("jwt");
+  res.status(200).json("User has been deleted!");
 });

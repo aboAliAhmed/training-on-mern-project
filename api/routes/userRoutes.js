@@ -1,9 +1,14 @@
 import express from "express";
-import { protect, test, updateUser } from "../controller/userController.js";
+import {
+  deleteUser,
+  protect,
+  test,
+  updateUser,
+} from "../controller/userController.js";
 
 const router = express.Router();
 
 router.get("/test", test);
-router.post("/updateMe/:id", protect, updateUser);
+router.route("/:id").patch(protect, updateUser).delete(protect, deleteUser);
 
 export default router;
