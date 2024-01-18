@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 import authRouter from "./routes/authRoute.js";
 import userRouter from "./routes/userRoutes.js";
+import listingRouter from "./routes/listingRoute.js";
 import globalErrorHandler from "./controller/errorController.js";
 
 const app = express();
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/listing", listingRouter);
 
 app.use(globalErrorHandler);
 
