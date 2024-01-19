@@ -69,7 +69,6 @@ export const updateUser = catchAsync(async (req, res, next) => {
       )
     );
   }
-
   if (req.user.id !== req.params.id)
     return next(new AppError("you can only update your account", 400));
 
