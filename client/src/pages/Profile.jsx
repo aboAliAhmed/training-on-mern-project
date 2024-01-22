@@ -122,20 +122,35 @@ export default function Profile() {
 
   const handleShowListings = async () => {
     try {
-
       setShowListingError(false);
-      const res = await fetch(`api/v1/listing/${currentUser.data.user._id}`);
+      const res = await fetch(`api/v1/listing/user/${currentUser.data.user._id}`);
       const data = await res.json();
       if (data.success === false) {
         setShowListingError(true);
         return;
       }
+
       setUserListings(data);
     } catch (err) {
       setShowListingError(true);
     }
   }
 
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`api/v1/listing/${listingId}`, {
+        method: 'DELETE'
+      })
+      const data = await res.json
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setUserListings((prev) => prev.filter((listing)=> listing._id !== listingId)); // filter out the previous data in the userListings to delete the current listing
+    } catch (err) {
+      console.log(err)
+    }
+  }
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
@@ -248,11 +263,12 @@ export default function Profile() {
                     <p>{listing.name}</p>
                   </Link>
                   <div className="flex flex-col items-center">
+                    <button 
+                      onClick={() => handleListingDelete(listing._id)}   
+                      className="text-red-700"
+                    >Delete</button>
                     <Link>
-                    <button className="text-red-700">Delete</button>
-                    </Link>
-                    <Link>
-                    <button className="text-green-700">Edit</button>
+                     <button className="text-green-700">Edit</button>
                     </Link>
                   </div>
                 </div>
