@@ -126,7 +126,7 @@ export default function CreateListing() {
 
       setLoading(true);
       setError(false);
-      const res = await fetch('/api/v1/create-listing', {
+      const res = await fetch('/api/v1/listing', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function CreateListing() {
         setError(data.message);
       }
       console.log(data);
-      navigate(`/listing/${data._id}`);
+      navigate(`/listing/${data._id}`, {replace: true});
     } catch (err) {
       setError(err.message);
       setLoading(false);
