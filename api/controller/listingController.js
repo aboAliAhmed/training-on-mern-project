@@ -30,16 +30,29 @@ export const getListings = catchAsync(async (req, res, next) => {
   res.status(200).json(listing);
 });
 
-export const updateListings = catchAsync(async (req, res, next) => {});
-
-export const deleteListings = catchAsync(async (req, res, next) => {
+export const updateListing = catchAsync(async (req, res, next) => {
   const listing = await Listing.findById(req.params.id);
-  console.log(!listing);
   if (!listing) {
-    console.log("lel");
+    return next(new AppError("Listing is not existed", 404));
+  }
+
+  if (req.user.id !== listing.userRef.toString()) {
+    return next(new AppError("You can only update your own listing", 401));
+  }
+  const updatedListing = await Listing.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+
+  res.status(200).json(updatedListing);
+});
+
+export const deleteListing = catchAsync(async (req, res, next) => {
+  const listing = await Listing.findById(req.params.id);
+  if (!listing) {
     return next(new AppError("Listing not found", 404));
   }
-  console.log(req.user.id !== listing.userRef.toString());
 
   if (req.user.id !== listing.userRef.toString()) {
     return next(new AppError("You can only delete your own listing", 401));

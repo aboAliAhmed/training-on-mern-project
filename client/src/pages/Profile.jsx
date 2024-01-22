@@ -16,7 +16,6 @@ import {
   deleteUserSuccess,
   logoutStart,
   logoutFailure,
-  loginSuccess,
   logoutSuccess
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";

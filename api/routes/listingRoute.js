@@ -3,8 +3,10 @@ import express from "express";
 import { protect } from "../controller/userController.js";
 import {
   createListing,
-  deleteListings,
+  deleteListing,
+  getListings,
   getUserListings,
+  updateListing,
 } from "../controller/listingController.js";
 
 const router = express.Router();
@@ -12,12 +14,10 @@ const router = express.Router();
 router.post("/", protect, createListing);
 router.get("/user/:id", protect, getUserListings);
 
-router.route("/:id").delete(protect, deleteListings);
-//   .get(protect, getListing)
-//   .patch(protect, updateListing)
+router
+  .route("/:id")
+  .delete(protect, deleteListing)
+  .patch(protect, updateListing)
+  .get(protect, getListings);
 
 export default router;
-
-// <button
-// onClick={handleListingDelete(listing._id)}             className="text-red-700">Delete</button
-// >
