@@ -4,7 +4,7 @@ import { protect } from "../controller/userController.js";
 import {
   createListing,
   deleteListing,
-  getListings,
+  getListing,
   getUserListings,
   updateListing,
 } from "../controller/listingController.js";
@@ -16,8 +16,8 @@ router.get("/user/:id", protect, getUserListings);
 
 router
   .route("/:id")
-  .delete(protect, deleteListing)
+  .get(getListing)
   .patch(protect, updateListing)
-  .get(protect, getListings);
+  .delete(protect, deleteListing);
 
 export default router;
