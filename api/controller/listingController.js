@@ -58,3 +58,7 @@ export const deleteListing = catchAsync(async (req, res, next) => {
   await Listing.findByIdAndDelete(req.params.id);
   res.status(200).json("Listing has been deleted!");
 });
+
+// {listing && !loading && !error &&
+//   console.log(listing)
+// }
