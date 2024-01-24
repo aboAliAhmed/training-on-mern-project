@@ -23,7 +23,7 @@ export default function UpdateListing() {
     bedRooms: 1,
     bathRooms: 1,
     regularPrice: 50,
-    discountPrice: 0,
+    discountedPrice: 0,
     offer: false,
     parking: false,
     furnished: false,
@@ -137,7 +137,7 @@ export default function UpdateListing() {
     e.preventDefault();
     try {
       if (formData.imageURLs.length < 1) return setError('you must upload at least one image');
-      if (+formData.regularPrice < +formData.discountPrice) return setError('Regular price must be greater than discount price');
+      if (+formData.regularPrice < +formData.discountedPrice) return setError('Regular price must be greater than discount price');
 
       setLoading(true);
       setError(false);
@@ -297,12 +297,12 @@ export default function UpdateListing() {
               <div className='flex items-center gap-2'>
                 <input 
                   type="number" 
-                  id='discountPrice'
+                  id='discountedPrice'
                   min='0' 
                   max='100000' 
                   required 
                   onChange={handleChange} 
-                  value={formData.discountPrice}  
+                  value={formData.discountedPrice}  
                   className='p-3 border border-gray-300 rounded-lg'
                 />
                 <div className='flex flex-col items-center'>
