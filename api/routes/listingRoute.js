@@ -2,6 +2,7 @@ import express from "express";
 
 import { protect } from "../controller/userController.js";
 import {
+  getListings,
   createListing,
   deleteListing,
   getListing,
@@ -11,8 +12,9 @@ import {
 
 const router = express.Router();
 
-router.post("/", protect, createListing);
 router.get("/user/:id", protect, getUserListings);
+
+router.route("/").get(getListings).post(protect, createListing);
 
 router
   .route("/:id")
