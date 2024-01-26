@@ -29,7 +29,6 @@ export default function Login() {
         body: JSON.stringify(formData)
       });
       const data = await res.json();
-      console.log(data)
       if (data.status === 'fail') {
         dispatch(loginFailure(data.message))
         return;

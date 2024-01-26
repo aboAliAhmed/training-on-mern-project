@@ -118,11 +118,10 @@ export default function Profile() {
       dispatch(logoutFailure(err.message));
     }
   }
-
   const handleShowListings = async () => {
     try {
       setShowListingError(false);
-      const res = await fetch(`api/v1/listing/user/${currentUser.data.user._id}`);
+      const res = await fetch(`/api/v1/listing/user/${currentUser.data.user._id}`);
       const data = await res.json();
       if (data.success === false) {
         setShowListingError(true);
@@ -137,10 +136,10 @@ export default function Profile() {
 
   const handleListingDelete = async (listingId) => {
     try {
-      const res = await fetch(`api/v1/listing/${listingId}`, {
+      const res = await fetch(`/api/v1/listing/${listingId}`, {
         method: 'DELETE'
       })
-      const data = await res.json
+      const data = await res.json()
       if (data.success === false) {
         console.log(data.message);
         return;

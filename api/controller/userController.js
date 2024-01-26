@@ -59,6 +59,16 @@ export const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+export const getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) return next(new AppError("User is not found", 404));
+
+  const { password: pass, ...rest } = user._doc;
+
+  res.status(200).json(rest);
+});
+
 export const updateUser = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
