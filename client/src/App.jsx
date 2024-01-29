@@ -9,7 +9,7 @@ import PrivateRoute from './components/PrivateRoute'
 import CreateListing from './pages/CreateListing';
 import UpdateListing from './pages/UpdateListng';
 import Listing from './pages/Listing';
-import SearchResults from './components/SearchResults';
+import SearchResults from './pages/SearchResults';
 
 export default function App() {
   return (
